@@ -1,5 +1,5 @@
-#include <string.h>
 #include <stdlib.h>
+#include <string.h>
 #include <regex.h>
 
 #include "ol_string.h"
@@ -65,11 +65,29 @@ char * ol_str_replace(char *orig, char *rep, char *replacement)
 char * ol_str_replace_regex(char *origin, regex_t *replace, char *replacement)
 {
 	regmatch_t rm[2];
+
 	if (regexec(replace, origin, 1, rm, 0) == 0) {
 		int size = rm[0].rm_eo - rm[0].rm_so;
 		char result[size];
+
 		strncpy(result, origin + rm[0].rm_eo, size);
+
 		return ol_str_replace(origin, result, replacement);
 	}
+
 	return NULL;
+}
+
+int ol_str_index(register const char *src, int c)
+{
+	int index = 0;
+
+	do {
+		index++;
+		if (*src == c) {
+			return index;
+		}
+	} while (*src++);
+
+	return 0;
 }
